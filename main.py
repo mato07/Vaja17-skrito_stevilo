@@ -2,6 +2,7 @@
 import os
 import jinja2
 import webapp2
+import random
 
 
 template_dir = os.path.join(os.path.dirname(__file__), "templates")
@@ -29,8 +30,23 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        return self.render_template("hello.html")
+        return self.render_template("vnesi.html")
+
+class LoginHandler(BaseHandler):
+    def post(self):
+
+        skrito_stevilo = random.randint(1,100)
+        #skrito_stevilo = 42
+
+        podatki = {"vneseno_st": int(self.request.get("vneseno-st")),
+                   "skrito_st": skrito_stevilo} #get ime zato ker je v htmlju name="ime"
+        return self.render_template("pokazi.html", podatki)
+
+        #return self.write("Uspesen post request " + self.request.get("ime") +
+         #                 "Tvoj priimek je: " + self.request.get("priimek"))
 
 app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler),
+    webapp2.Route('/rezultat', LoginHandler)
+
 ], debug=True)
